@@ -61,7 +61,6 @@ public class Task3 {
     public static void playGameGuessWord() {
         String findWord = getRandomWord();
         char[] resultString = {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'};
-        System.out.println(findWord);
         int count = 0;
         boolean flag = true;
         while(flag) {
