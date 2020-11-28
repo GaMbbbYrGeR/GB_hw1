@@ -32,7 +32,6 @@ public class Task3 {
 
     public static void playGameGuessNumber() {
         int findNumber = getRandomNumber(), i = 0;
-        System.out.println(findNumber);
         while (i < 3) {
             int nextNumber = PRINT.nextInt();
             if(nextNumber > findNumber) {
