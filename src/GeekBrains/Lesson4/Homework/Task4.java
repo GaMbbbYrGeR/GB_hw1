@@ -190,9 +190,9 @@ public class Task4 {
                             XTOBLOCK = xStart + j;
                             YTOBLOCK = y;
                         } else {
-                            if(count == STEP - 1 && (map[y][xStart + j - STEP - 1] == DOT_EMPTY)) {
+                            if(count == STEP - 1 && (xStart + j - STEP >= 0) && (map[y][xStart + j - STEP] == DOT_EMPTY)) {
                                 FLAGTOBLOCK = true;
-                                XTOBLOCK = xStart + j - STEP - 1;
+                                XTOBLOCK = xStart + j - STEP;
                                 YTOBLOCK = y;
                             }
                         }
@@ -208,10 +208,10 @@ public class Task4 {
                             XTOBLOCK = x;
                             YTOBLOCK = yStart + j;
                         } else {
-                            if(count == STEP - 1 && (map[yStart + j - STEP - 1][x] == DOT_EMPTY)) {
+                            if(count == STEP - 1 && (yStart + j - STEP >= 0) && (map[yStart + j - STEP][x] == DOT_EMPTY)) {
                                 FLAGTOBLOCK = true;
                                 XTOBLOCK = x;
-                                YTOBLOCK = yStart + j - STEP - 1;
+                                YTOBLOCK = yStart + j - STEP;
                             }
                         }
                         count = 0;
@@ -226,10 +226,11 @@ public class Task4 {
                             XTOBLOCK = diagonal1StartX + j;
                             YTOBLOCK = diagonal1StartY + j;
                         } else {
-                            if(count == STEP - 1 && (map[diagonal1StartY + j][diagonal1StartX + j] == DOT_EMPTY)) {
+                            if(count == STEP - 1 && (diagonal1StartY + j - STEP >= 0) && (diagonal1StartX + j - STEP >= 0)
+                                    && (map[diagonal1StartY + j - STEP][diagonal1StartX + j - STEP] == DOT_EMPTY)) {
                                 FLAGTOBLOCK = true;
-                                XTOBLOCK = diagonal1StartX + j - STEP - 1;
-                                YTOBLOCK = diagonal1StartY + j - STEP - 1;
+                                XTOBLOCK = diagonal1StartX + j - STEP;
+                                YTOBLOCK = diagonal1StartY + j - STEP;
                             }
                         }
                         count = 0;
@@ -244,10 +245,11 @@ public class Task4 {
                             XTOBLOCK = diagonal2StartX - j;
                             YTOBLOCK = diagonal2StartY + j;
                         } else {
-                            if(count == STEP - 1 && (map[diagonal2StartY + j][diagonal2StartX - j] == DOT_EMPTY)) {
+                            if(count == STEP - 1 && (diagonal2StartY + j - STEP >= 0) && (diagonal2StartX - j + STEP >= 0)
+                                    && (map[diagonal2StartY + j - STEP][diagonal2StartX - j + STEP] == DOT_EMPTY)) {
                                 FLAGTOBLOCK = true;
-                                XTOBLOCK = diagonal2StartX - j + STEP + 1;
-                                YTOBLOCK = diagonal2StartY + j - STEP - 1;
+                                XTOBLOCK = diagonal2StartX - j + STEP;
+                                YTOBLOCK = diagonal2StartY + j - STEP;
                             }
                         }
                         count = 0;
