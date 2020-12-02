@@ -120,7 +120,7 @@ public class Task4 {
 
         int xStart = 0, yStart = 0, xEnd = SIZE - 1, yEnd = SIZE - 1;
         int[] sizeOfMetods = new int[4];
-        int count = 0;
+        int count;
 
         if(x - STEP >= 0) {
             xStart = x - STEP + 1;
@@ -171,7 +171,7 @@ public class Task4 {
             count = 0;
             for (int j = 0; j < sizeOfMetods[i]; j++) {
                 if(i == 0) {
-                    if(map[xStart + j][y] == c) {
+                    if(map[y][xStart + j] == c) {
                         count++;
                     } else {
                         count = 0;
@@ -185,20 +185,20 @@ public class Task4 {
                     }
                 }
                 if(i == 2) {
-                    if(map[diagonal1StartX + j][diagonal1StartY + j] == c) {
+                    if(map[diagonal1StartY + j][diagonal1StartX + j] == c) {
                         count++;
                     } else {
                         count = 0;
                     }
                 }
                 if(i == 3) {
-                    if(map[diagonal2StartX - j][diagonal2StartY + j] == c) {
+                    if(map[diagonal2StartY + j][diagonal2StartX - j] == c) {
                         count++;
                     } else {
                         count = 0;
                     }
                 }
-//                System.out.println(count);
+                System.out.println(count);
                 if(count == STEP) {
                     return true;
                 }
