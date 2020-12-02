@@ -1,15 +1,17 @@
-package lesson4;
+package GeekBrains.Lesson4.Homework;
 
 import java.util.Random;
 import java.util.Scanner;
 
-public class XOGame {
+public class Task4 {
     static final int SIZE = 3;
-//    static final int DOTS_TO_WIN = 3;
+    static final int STEP = 3;
 
     static final char DOT_X = 'X';
     static final char DOT_O = 'O';
     static final char DOT_EMPTY = '.';
+    static int LASTX;
+    static int LASTY;
 
     static char[][] map;
 
@@ -24,7 +26,7 @@ public class XOGame {
         while (true) {
             humanTurn();
             printMap();
-            if(checkWin(DOT_X)){
+            if (checkWin(LASTX, LASTY, DOT_X)) {
                 System.out.println("Вы выиграли!!!");
                 break;
             }
@@ -35,7 +37,7 @@ public class XOGame {
 
             aiTurn();
             printMap();
-            if(checkWin(DOT_O)){
+            if (checkWin(LASTX, LASTY, DOT_O)) {
                 System.out.println("Комьютер победил");
                 break;
             }
@@ -79,6 +81,8 @@ public class XOGame {
             y = sc.nextInt() - 1;
         } while (!isCellValid(y, x));
         map[y][x] = DOT_X;
+        LASTX = x;
+        LASTY = y;
     }
 
     static void aiTurn() {
@@ -89,6 +93,8 @@ public class XOGame {
             y = random.nextInt(SIZE);
         } while (!isCellValid(y, x));
         map[y][x] = DOT_O;
+        LASTX = x;
+        LASTY = y;
     }
 
 
@@ -110,19 +116,94 @@ public class XOGame {
         return true;
     }
 
-    static boolean checkWin(char c) {
-        if (map[0][0] == c && map[0][1] == c && map[0][2] == c) { return true; }
-        if (map[1][0] == c && map[1][1] == c && map[1][2] == c) { return true; }
-        if (map[2][0] == c && map[2][1] == c && map[2][2] == c) { return true; }
+    static boolean checkWin(int x, int y, char c) {
 
-        if (map[0][0] == c && map[1][0] == c && map[2][0] == c) { return true; }
-        if (map[0][1] == c && map[1][1] == c && map[2][1] == c) { return true; }
-        if (map[0][2] == c && map[1][2] == c && map[2][2] == c) { return true; }
+        int xStart = 0, yStart = 0, xEnd = SIZE - 1, yEnd = SIZE - 1;
+        int[] sizeOfMetods = new int[4];
+        int count = 0;
 
-        if (map[0][0] == c && map[1][1] == c && map[2][2] == c) { return true; }
-        if (map[0][2] == c && map[1][1] == c && map[2][0] == c) { return true; }
+        if(x - STEP >= 0) {
+            xStart = x - STEP + 1;
+        }
+        if(y - STEP >= 0) {
+            yStart = y - STEP + 1;
+        }
+        if(x + STEP <= SIZE) {
+            xEnd = x + STEP - 1;
+        }
+        if(y + STEP <= SIZE) {
+            yEnd = y + STEP - 1;
+        }
 
+        int diagonal1StartX = xStart, diagonal1StartY = yStart, diagonal1EndX = xEnd, diagonal1EndY = yEnd;
+        int diagonal2StartX = xEnd, diagonal2StartY = yStart, diagonal2EndX = xStart, diagonal2EndY = yEnd;
+
+        if(x - xStart >= y - yStart) {
+            diagonal1StartX = x - (y - yStart);
+        } else {
+            diagonal1StartY = y - (x - xStart);
+        }
+
+        if(xEnd - x >= yEnd - y) {
+            diagonal1EndX = x + (yEnd - y);
+        } else {
+            diagonal1EndY = y + (xEnd - x);
+        }
+
+        if(xEnd - x >= y - yStart) {
+            diagonal2StartX = x + (y - yStart);
+        } else {
+            diagonal2StartY = y - (xEnd - x);
+        }
+
+        if(x - xStart >= yEnd - y) {
+            diagonal2EndX = x - (yEnd - y);
+        } else {
+            diagonal2EndY = y + (x - xStart);
+        }
+
+        sizeOfMetods[0] = xEnd - xStart + 1;
+        sizeOfMetods[1] = yEnd - yStart + 1;
+        sizeOfMetods[2] = diagonal1EndX - diagonal1StartX + 1;
+        sizeOfMetods[3] = diagonal2EndY - diagonal2StartY + 1;
+
+        for (int i = 0; i < 4; i++) {
+            count = 0;
+            for (int j = 0; j < sizeOfMetods[i]; j++) {
+                if(i == 0) {
+                    if(map[xStart + j][y] == c) {
+                        count++;
+                    } else {
+                        count = 0;
+                    }
+                }
+                if(i == 1) {
+                    if(map[yStart + j][x] == c) {
+                        count++;
+                    } else {
+                        count = 0;
+                    }
+                }
+                if(i == 2) {
+                    if(map[diagonal1StartX + j][diagonal1StartY + j] == c) {
+                        count++;
+                    } else {
+                        count = 0;
+                    }
+                }
+                if(i == 3) {
+                    if(map[diagonal2StartX - j][diagonal2StartY + j] == c) {
+                        count++;
+                    } else {
+                        count = 0;
+                    }
+                }
+//                System.out.println(count);
+                if(count == STEP) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
-
 }
