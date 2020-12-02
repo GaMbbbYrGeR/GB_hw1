@@ -7,6 +7,10 @@ public class Task4 {
     static final int SIZE = 3;
     static final int STEP = 3;
 
+    static boolean FLAGTOBLOCK = false;
+    static int XTOBLOCK;
+    static int YTOBLOCK;
+
     static final char DOT_X = 'X';
     static final char DOT_O = 'O';
     static final char DOT_EMPTY = '.';
@@ -88,13 +92,20 @@ public class Task4 {
     static void aiTurn() {
         int x;
         int y;
-        do {
-            x = random.nextInt(SIZE);
-            y = random.nextInt(SIZE);
-        } while (!isCellValid(y, x));
-        map[y][x] = DOT_O;
-        LASTX = x;
-        LASTY = y;
+        if(FLAGTOBLOCK) {
+            map[YTOBLOCK][XTOBLOCK] = DOT_O;
+            LASTX = XTOBLOCK;
+            LASTY = YTOBLOCK;
+            FLAGTOBLOCK = false;
+        } else {
+            do {
+                x = random.nextInt(SIZE);
+                y = random.nextInt(SIZE);
+            } while (!isCellValid(y, x));
+            map[y][x] = DOT_O;
+            LASTX = x;
+            LASTY = y;
+        }
     }
 
 
@@ -174,6 +185,17 @@ public class Task4 {
                     if(map[y][xStart + j] == c) {
                         count++;
                     } else {
+                        if(count == STEP - 1 && (map[y][xStart + j] == DOT_EMPTY)) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = xStart + j;
+                            YTOBLOCK = y;
+                        } else {
+                            if(count == STEP - 1 && (map[y][xStart + j - STEP - 1] == DOT_EMPTY)) {
+                                FLAGTOBLOCK = true;
+                                XTOBLOCK = xStart + j - STEP - 1;
+                                YTOBLOCK = y;
+                            }
+                        }
                         count = 0;
                     }
                 }
@@ -181,6 +203,17 @@ public class Task4 {
                     if(map[yStart + j][x] == c) {
                         count++;
                     } else {
+                        if(count == STEP - 1 && (map[yStart + j][x] == DOT_EMPTY)) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = x;
+                            YTOBLOCK = yStart + j;
+                        } else {
+                            if(count == STEP - 1 && (map[yStart + j - STEP - 1][x] == DOT_EMPTY)) {
+                                FLAGTOBLOCK = true;
+                                XTOBLOCK = x;
+                                YTOBLOCK = yStart + j - STEP - 1;
+                            }
+                        }
                         count = 0;
                     }
                 }
@@ -188,6 +221,17 @@ public class Task4 {
                     if(map[diagonal1StartY + j][diagonal1StartX + j] == c) {
                         count++;
                     } else {
+                        if(count == STEP - 1 && (map[diagonal1StartY + j][diagonal1StartX + j] == DOT_EMPTY)) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = diagonal1StartX + j;
+                            YTOBLOCK = diagonal1StartY + j;
+                        } else {
+                            if(count == STEP - 1 && (map[diagonal1StartY + j][diagonal1StartX + j] == DOT_EMPTY)) {
+                                FLAGTOBLOCK = true;
+                                XTOBLOCK = diagonal1StartX + j - STEP - 1;
+                                YTOBLOCK = diagonal1StartY + j - STEP - 1;
+                            }
+                        }
                         count = 0;
                     }
                 }
@@ -195,10 +239,20 @@ public class Task4 {
                     if(map[diagonal2StartY + j][diagonal2StartX - j] == c) {
                         count++;
                     } else {
+                        if(count == STEP - 1 && (map[diagonal2StartY + j][diagonal2StartX - j] == DOT_EMPTY)) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = diagonal2StartX - j;
+                            YTOBLOCK = diagonal2StartY + j;
+                        } else {
+                            if(count == STEP - 1 && (map[diagonal2StartY + j][diagonal2StartX - j] == DOT_EMPTY)) {
+                                FLAGTOBLOCK = true;
+                                XTOBLOCK = diagonal2StartX - j + STEP + 1;
+                                YTOBLOCK = diagonal2StartY + j - STEP - 1;
+                            }
+                        }
                         count = 0;
                     }
                 }
-                System.out.println(count);
                 if(count == STEP) {
                     return true;
                 }
