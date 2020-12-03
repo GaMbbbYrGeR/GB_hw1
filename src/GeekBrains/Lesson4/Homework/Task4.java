@@ -96,7 +96,6 @@ public class Task4 {
             map[YTOBLOCK][XTOBLOCK] = DOT_O;
             LASTX = XTOBLOCK;
             LASTY = YTOBLOCK;
-            FLAGTOBLOCK = false;
         } else {
             do {
                 x = random.nextInt(SIZE);
@@ -106,6 +105,7 @@ public class Task4 {
             LASTX = x;
             LASTY = y;
         }
+        FLAGTOBLOCK = false;
     }
 
 
@@ -184,6 +184,11 @@ public class Task4 {
                 if(i == 0) {
                     if(map[y][xStart + j] == c) {
                         count++;
+                        if(j == sizeOfMetods[i] - 1 && count == STEP - 1) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = SIZE - STEP;
+                            YTOBLOCK = y;
+                        }
                     } else {
                         if(count == STEP - 1 && (map[y][xStart + j] == DOT_EMPTY)) {
                             FLAGTOBLOCK = true;
@@ -202,6 +207,11 @@ public class Task4 {
                 if(i == 1) {
                     if(map[yStart + j][x] == c) {
                         count++;
+                        if(j == sizeOfMetods[i] - 1 && count == STEP - 1) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = x;
+                            YTOBLOCK = SIZE - STEP;
+                        }
                     } else {
                         if(count == STEP - 1 && (map[yStart + j][x] == DOT_EMPTY)) {
                             FLAGTOBLOCK = true;
@@ -220,6 +230,11 @@ public class Task4 {
                 if(i == 2) {
                     if(map[diagonal1StartY + j][diagonal1StartX + j] == c) {
                         count++;
+                        if(j == sizeOfMetods[i] - 1 && count == STEP - 1) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = SIZE - STEP;
+                            YTOBLOCK = SIZE - STEP;
+                        }
                     } else {
                         if(count == STEP - 1 && (map[diagonal1StartY + j][diagonal1StartX + j] == DOT_EMPTY)) {
                             FLAGTOBLOCK = true;
@@ -239,6 +254,11 @@ public class Task4 {
                 if(i == 3) {
                     if(map[diagonal2StartY + j][diagonal2StartX - j] == c) {
                         count++;
+                        if(j == sizeOfMetods[i] - 1 && count == STEP - 1) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = SIZE - STEP;
+                            YTOBLOCK = SIZE - STEP;
+                        }
                     } else {
                         if(count == STEP - 1 && (map[diagonal2StartY + j][diagonal2StartX - j] == DOT_EMPTY)) {
                             FLAGTOBLOCK = true;
