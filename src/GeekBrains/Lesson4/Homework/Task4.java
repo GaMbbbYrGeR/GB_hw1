@@ -4,12 +4,18 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Task4 {
-    static final int SIZE = 3;
-//    static final int DOTS_TO_WIN = 3;
+    static final int SIZE = 5;
+    static final int STEP = 4;
+
+    static boolean FLAGTOBLOCK = false;
+    static int XTOBLOCK;
+    static int YTOBLOCK;
 
     static final char DOT_X = 'X';
     static final char DOT_O = 'O';
     static final char DOT_EMPTY = '.';
+    static int LASTX;
+    static int LASTY;
 
     static char[][] map;
 
@@ -24,7 +30,7 @@ public class Task4 {
         while (true) {
             humanTurn();
             printMap();
-            if(checkWin(DOT_X)){
+            if (checkWin(LASTX, LASTY, DOT_X)) {
                 System.out.println("Вы выиграли!!!");
                 break;
             }
@@ -35,7 +41,7 @@ public class Task4 {
 
             aiTurn();
             printMap();
-            if(checkWin(DOT_O)){
+            if (checkWin(LASTX, LASTY, DOT_O)) {
                 System.out.println("Комьютер победил");
                 break;
             }
@@ -79,16 +85,35 @@ public class Task4 {
             y = sc.nextInt() - 1;
         } while (!isCellValid(y, x));
         map[y][x] = DOT_X;
+        LASTX = x;
+        LASTY = y;
     }
 
     static void aiTurn() {
         int x;
         int y;
-        do {
-            x = random.nextInt(SIZE);
-            y = random.nextInt(SIZE);
-        } while (!isCellValid(y, x));
-        map[y][x] = DOT_O;
+        if(FLAGTOBLOCK && map[YTOBLOCK][XTOBLOCK] == DOT_EMPTY) {
+            map[YTOBLOCK][XTOBLOCK] = DOT_O;
+            LASTX = XTOBLOCK;
+            LASTY = YTOBLOCK;
+        } else {
+            FLAGTOBLOCK = false;
+            checkWin(XTOBLOCK, YTOBLOCK, DOT_X);
+            if (FLAGTOBLOCK) {
+                map[YTOBLOCK][XTOBLOCK] = DOT_O;
+                LASTX = XTOBLOCK;
+                LASTY = YTOBLOCK;
+            } else {
+                do {
+                    x = random.nextInt(SIZE);
+                    y = random.nextInt(SIZE);
+                } while (!isCellValid(y, x));
+                map[y][x] = DOT_O;
+                LASTX = x;
+                LASTY = y;
+            }
+        }
+        FLAGTOBLOCK = false;
     }
 
 
@@ -110,19 +135,186 @@ public class Task4 {
         return true;
     }
 
-    static boolean checkWin(char c) {
-        if (map[0][0] == c && map[0][1] == c && map[0][2] == c) { return true; }
-        if (map[1][0] == c && map[1][1] == c && map[1][2] == c) { return true; }
-        if (map[2][0] == c && map[2][1] == c && map[2][2] == c) { return true; }
+    static boolean checkWin(int x, int y, char c) {
 
-        if (map[0][0] == c && map[1][0] == c && map[2][0] == c) { return true; }
-        if (map[0][1] == c && map[1][1] == c && map[2][1] == c) { return true; }
-        if (map[0][2] == c && map[1][2] == c && map[2][2] == c) { return true; }
+        int xStart = 0, yStart = 0, xEnd = SIZE - 1, yEnd = SIZE - 1;
+        int[] sizeOfMetods = new int[4];
+        int count;
+        int countInBothSide;
 
-        if (map[0][0] == c && map[1][1] == c && map[2][2] == c) { return true; }
-        if (map[0][2] == c && map[1][1] == c && map[2][0] == c) { return true; }
+        if(x - STEP >= 0) {
+            xStart = x - STEP + 1;
+        }
+        if(y - STEP >= 0) {
+            yStart = y - STEP + 1;
+        }
+        if(x + STEP <= SIZE) {
+            xEnd = x + STEP - 1;
+        }
+        if(y + STEP <= SIZE) {
+            yEnd = y + STEP - 1;
+        }
 
+        int diagonal1StartX = xStart, diagonal1StartY = yStart, diagonal1EndX = xEnd, diagonal1EndY = yEnd;
+        int diagonal2StartX = xEnd, diagonal2StartY = yStart, diagonal2EndX = xStart, diagonal2EndY = yEnd;
+
+        if(x - xStart >= y - yStart) {
+            diagonal1StartX = x - (y - yStart);
+        } else {
+            diagonal1StartY = y - (x - xStart);
+        }
+
+        if(xEnd - x >= yEnd - y) {
+            diagonal1EndX = x + (yEnd - y);
+        } else {
+            diagonal1EndY = y + (xEnd - x);
+        }
+
+        if(xEnd - x >= y - yStart) {
+            diagonal2StartX = x + (y - yStart);
+        } else {
+            diagonal2StartY = y - (xEnd - x);
+        }
+
+        if(x - xStart >= yEnd - y) {
+            diagonal2EndX = x - (yEnd - y);
+        } else {
+            diagonal2EndY = y + (x - xStart);
+        }
+
+        sizeOfMetods[0] = xEnd - xStart + 1;
+        sizeOfMetods[1] = yEnd - yStart + 1;
+        sizeOfMetods[2] = diagonal1EndX - diagonal1StartX + 1;
+        sizeOfMetods[3] = diagonal2EndY - diagonal2StartY + 1;
+
+        for (int i = 0; i < 4; i++) {
+            count = 0;
+            for (int j = 0; j < sizeOfMetods[i]; j++) {
+                if(i == 0) {
+                    if(map[y][xStart + j] == c) {
+                        count++;
+                        if(j == sizeOfMetods[i] - 1 && count == STEP - 1 && !FLAGTOBLOCK) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = SIZE - STEP;
+                            YTOBLOCK = y;
+                        }
+                    } else {
+                        countInBothSide = 0;
+                        if(map[y][xStart + j] == DOT_EMPTY && !FLAGTOBLOCK) {
+                            int k = 1;
+                            while(j - k >= 0 && map[y][xStart + j - k] == c) {
+                                countInBothSide++;
+                                k++;
+                            }
+                            k = 1;
+                            while(j + k <= sizeOfMetods[i] - 1 && map[y][xStart + j + k] == c) {
+                                countInBothSide++;
+                                k++;
+                            }
+                        }
+                        if(countInBothSide == STEP - 1) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = xStart + j;
+                            YTOBLOCK = y;
+                        }
+                        count = 0;
+                    }
+                }
+                if(i == 1) {
+                    if(map[yStart + j][x] == c) {
+                        count++;
+                        if(j == sizeOfMetods[i] - 1 && count == STEP - 1 && !FLAGTOBLOCK) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = x;
+                            YTOBLOCK = SIZE - STEP;
+                        }
+                    } else {
+                        countInBothSide = 0;
+                        if(map[yStart + j][x] == DOT_EMPTY && !FLAGTOBLOCK) {
+                            int k = 1;
+                            while(j - k >= 0 && map[yStart + j - k][x] == c) {
+                                countInBothSide++;
+                                k++;
+                            }
+                            k = 1;
+                            while(j + k <= sizeOfMetods[i] - 1 && map[yStart + j + k][x] == c) {
+                                countInBothSide++;
+                                k++;
+                            }
+                        }
+                        if(countInBothSide == STEP - 1) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = x;
+                            YTOBLOCK = yStart + j;
+                        }
+                        count = 0;
+                    }
+                }
+                if(i == 2) {
+                    if(map[diagonal1StartY + j][diagonal1StartX + j] == c) {
+                        count++;
+                        if(j == sizeOfMetods[i] - 1 && count == STEP - 1 && !FLAGTOBLOCK) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = SIZE - STEP;
+                            YTOBLOCK = SIZE - STEP;
+                        }
+                    } else {
+                        countInBothSide = 0;
+                        if(map[diagonal1StartY + j][diagonal1StartX + j] == DOT_EMPTY && !FLAGTOBLOCK) {
+                            int k = 1;
+                            while(j - k >= 0 && map[diagonal1StartY + j - k][diagonal1StartX + j - k] == c) {
+                                countInBothSide++;
+                                k++;
+                            }
+                            k = 1;
+                            while(j + k <= sizeOfMetods[i] - 1 && map[diagonal1StartY + j + k][diagonal1StartX + j + k] == c) {
+                                countInBothSide++;
+                                k++;
+                            }
+                        }
+                        if(countInBothSide == STEP - 1) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = diagonal1StartX + j;
+                            YTOBLOCK = diagonal1StartY + j;
+                        }
+                        count = 0;
+                    }
+                }
+                if(i == 3) {
+                    if(map[diagonal2StartY + j][diagonal2StartX - j] == c) {
+                        count++;
+                        if(j == sizeOfMetods[i] - 1 && count == STEP - 1 && !FLAGTOBLOCK) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = SIZE - STEP;
+                            YTOBLOCK = SIZE - STEP;
+                        }
+                    } else {
+                        countInBothSide = 0;
+                        if(map[diagonal2StartY + j][diagonal2StartX - j] == DOT_EMPTY && !FLAGTOBLOCK) {
+                            int k = 1;
+                            while(j - k >= 0 && map[diagonal2StartY + j - k][diagonal2StartX - j + k] == c) {
+                                countInBothSide++;
+                                k++;
+                            }
+                            k = 1;
+                            while(j + k <= sizeOfMetods[i] - 1 && map[diagonal2StartY + j + k][diagonal2StartX - j - k] == c) {
+                                countInBothSide++;
+                                k++;
+                            }
+                        }
+                        if(countInBothSide == STEP - 1) {
+                            FLAGTOBLOCK = true;
+                            XTOBLOCK = diagonal2StartX - j;
+                            YTOBLOCK = diagonal2StartY + j;
+                        }
+                        count = 0;
+                    }
+                }
+                if(count == STEP) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
-
 }
