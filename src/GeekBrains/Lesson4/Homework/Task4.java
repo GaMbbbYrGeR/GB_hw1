@@ -1,9 +1,9 @@
-package lesson4;
+package GeekBrains.Lesson4.Homework;
 
 import java.util.Random;
 import java.util.Scanner;
 
-public class XOGame {
+public class Task4 {
     static final int SIZE = 3;
 //    static final int DOTS_TO_WIN = 3;
 
