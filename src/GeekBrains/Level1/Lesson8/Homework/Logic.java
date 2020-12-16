@@ -20,7 +20,6 @@ public class Logic {
 
     static char[][] map;
 
-    static Scanner sc = new Scanner(System.in);
     static Random random = new Random();
 
     static boolean gameFinished;
@@ -40,7 +39,7 @@ public class Logic {
 
         aiTurn();
         printMap();
-        if (checkWin(LASTX, LASTY, DOT_X)) {
+        if (checkWin(LASTX, LASTY, DOT_O)) {
             WHO_WIN = "Комьютер победил";
             return;
         }
