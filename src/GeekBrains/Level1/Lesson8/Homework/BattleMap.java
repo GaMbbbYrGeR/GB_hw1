@@ -34,10 +34,11 @@ public class BattleMap extends JPanel {
 
                 if (!Logic.gameFinished) {
                     Logic.humanTurn(cellX, cellY);
-
-                    // тут можете проверить кто победил и вывести результат графически
-                    // например через gameWindow
                 }
+//                } else {
+//                    ((Graphics2D)g).setStroke(new BasicStroke(20));
+//                    g.setColor(Color.DARK_GRAY);
+//                    g.drawString("qweqweqwe", 200, 200);
                 repaint();
             }
         });
@@ -77,8 +78,14 @@ public class BattleMap extends JPanel {
                 if(Logic.map[i][j] == Logic.DOT_X){
                     drawX(g, j, i);
                 }
+            }
+        }
 
-
+        for (int i = 0; i < Logic.SIZE; i++) {
+            for (int j = 0; j < Logic.SIZE; j++) {
+                if(Logic.map[i][j] == Logic.DOT_O){
+                    draw0(g, j, i);
+                }
             }
         }
 
@@ -95,5 +102,13 @@ public class BattleMap extends JPanel {
         g.setColor(Color.RED);
         g.drawLine(cellX * cellWidth, cellY * cellHeight,
                 (cellX + 1) * cellWidth, (cellY + 1) * cellHeight);
+        g.drawLine((cellX + 1) * cellWidth, cellY * cellHeight,
+                    cellX * cellWidth, (cellY + 1) * cellHeight);
+    }
+
+    private void draw0(Graphics g, int cellX, int cellY) {
+        ((Graphics2D) g).setStroke(new BasicStroke(5));
+        g.setColor(Color.GREEN);
+        g.drawOval(cellX * cellWidth + 10, cellY * cellHeight + 10, cellWidth - 20, cellHeight - 20);
     }
 }
