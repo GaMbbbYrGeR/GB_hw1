@@ -20,6 +20,7 @@ public class BattleMap extends JPanel {
     private int cellWidth;
     private int cellHeight;
 
+    private boolean resultWrite = true;
 
     public BattleMap(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
@@ -35,10 +36,6 @@ public class BattleMap extends JPanel {
                 if (!Logic.gameFinished) {
                     Logic.humanTurn(cellX, cellY);
                 }
-//                } else {
-//                    ((Graphics2D)g).setStroke(new BasicStroke(20));
-//                    g.setColor(Color.DARK_GRAY);
-//                    g.drawString("qweqweqwe", 200, 200);
                 repaint();
             }
         });
@@ -89,12 +86,14 @@ public class BattleMap extends JPanel {
             }
         }
 
-//        ((Graphics2D)g).setStroke(new BasicStroke(5));
-//        g.setColor(Color.RED);
-//        g.drawString("qweqweqwe", 200, 200);
+        Font font = new Font("Arial", Font.BOLD, 30);
 
-//        g.drawLine(100, 100, 400, 400);
-//        g.drawOval(100, 100, 300, 300);
+        if(Logic.gameFinished && resultWrite) {
+            ((Graphics2D)g).setStroke(new BasicStroke(5));
+            g.setColor(Color.BLACK);
+            g.setFont(font);
+            g.drawString(Logic.WHO_WIN, gameWindow.WINDOW_X_CENTER - 100, gameWindow.WINDOW_Y_CENTER);
+        }
     }
 
     private void drawX(Graphics g, int cellX, int cellY) {
