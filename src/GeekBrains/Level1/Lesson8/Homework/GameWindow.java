@@ -9,9 +9,6 @@ public class GameWindow extends JFrame {
     static final int WINDOW_WIDTH = 505;
     static final int WINDOW_HEIGHT = 555;
 
-    final int WINDOW_X_CENTER = WINDOW_X / 2;
-    final int WINDOW_Y_CENTER = WINDOW_Y / 2;
-
     private SettingWindow settingWindow;
     private BattleMap battleMap;
 

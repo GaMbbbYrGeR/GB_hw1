@@ -4,8 +4,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Task4 {
-    static final int SIZE = 5;
-    static final int STEP = 4;
+    static final int SIZE = 3;
+    static final int STEP = 3;
 
     static boolean FLAGTOBLOCK = false;
     static int XTOBLOCK;

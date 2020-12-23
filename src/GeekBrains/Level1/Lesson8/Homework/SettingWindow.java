@@ -70,7 +70,7 @@ public class SettingWindow extends JFrame {
             int winningLength = slWinnigLength.getValue();
 
             Logic.SIZE = fieldSize;
-            Logic.STEP = winningLength;
+            Logic.DOTS_TO_WIN = winningLength;
             Logic.initMap();
             Logic.gameFinished = false;
 
