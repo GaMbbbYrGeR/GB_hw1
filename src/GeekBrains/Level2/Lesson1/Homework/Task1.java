@@ -9,8 +9,11 @@ public class Task1 {
         };
 
         Barriers[] barriers = {
+                new Track(1000),
+                new Wall(10),
+                new Track(2000),
+                new Wall(20),
                 new Track(4000),
-                new Wall(70),
         };
 
         for (int i = 0; i < participants.length; i++) {

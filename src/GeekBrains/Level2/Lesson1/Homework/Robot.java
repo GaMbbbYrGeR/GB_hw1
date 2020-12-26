@@ -1,10 +1,10 @@
 package GeekBrains.Level2.Lesson1.Homework;
 
 public class Robot implements Participants {
-    private static String name;
-    private static int runLimit;
-    private static int jumpLimit;
-    private static boolean flag = true;
+    private String name;
+    private int runLimit;
+    private int jumpLimit;
+    private boolean flag = true;
 
     public Robot(String name, int runLimit, int jumpLimit) {
         this.name = name;
