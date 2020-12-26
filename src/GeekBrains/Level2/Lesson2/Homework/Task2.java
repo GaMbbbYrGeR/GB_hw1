@@ -24,9 +24,9 @@ public class Task2 {
         };
 
         try {
-            sumOfElements(arr);
-            sumOfElements(arr1);
-            sumOfElements(arr2);
+            System.out.println(sumOfElements(arr));
+            System.out.println(sumOfElements(arr1));
+            System.out.println(sumOfElements(arr2));
         } catch (MyArraySizeException | MyArrayDataException e) {
             e.printStackTrace();
         }
@@ -43,7 +43,7 @@ public class Task2 {
                     throw new MyArraySizeException("Не корректное кол-во элементов в строке " + i + ": " + arr[i].length, arr[i].length);
                 }
                 try {
-                    sum = Integer.parseInt(arr[i][j]);
+                    sum += Integer.parseInt(arr[i][j]);
                 } catch (NumberFormatException e) {
                     throw new MyArrayDataException("Неверный формат строки в ячейке arr[" + i + "][" + j + "]", arr[i][j]);
                 }
