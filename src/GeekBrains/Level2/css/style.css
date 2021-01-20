@@ -1,0 +1,36 @@
+.root {
+    -fx-font-size: 16px;
+    -fx-background-image: url("/GeekBrains/Level2/image/1.jpg");
+
+    -fx-background-size: 100% 100%;
+}
+
+.button {
+    -fx-background-color: darkseagreen;
+}
+
+.button:hover, #btn2:hover {
+    -fx-background-color: #f8ff62;
+    -fx-font-size: 17px;
+}
+
+#btn2 {
+    -fx-background-color: #113cff;
+}
+
+#addBtn {
+    -fx-background-color: #54ff11;
+}
+
+#addBtn:hover {
+    -fx-background-color: #11ff98;
+}
+
+.text-area {
+    -fx-control-inner-background: #403c3d;
+    -fx-text-fill: #e0c2b5;
+    -fx-highlight-text-fill: #50a5ff;
+    -fx-highlight-fill: #ffea00;
+    -fx-font-weight: bold;
+    -fx-font-style: Times;
+}
