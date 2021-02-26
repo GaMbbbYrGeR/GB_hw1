@@ -57,6 +57,7 @@ public class ClientHandler {
                             break;
                         }
 
+<<<<<<< HEAD
                         String[] token = str.split("\\s", 3);
 
                         if (token[0].equals(Command.PRIVATCHAT)) {
@@ -64,6 +65,9 @@ public class ClientHandler {
                         } else {
                             server.broadcastMsg(this, str);
                         }
+=======
+                        server.broadcastMsg(this, str);
+>>>>>>> Commit 3.7.2
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

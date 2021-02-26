@@ -1,4 +1,4 @@
-package GeekBrains.Level2.Lesson7.Homework;
+package GeekBrains.Level2.Lesson8.Homework;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,12 +10,12 @@ public class Server {
     private ServerSocket server;
     private Socket socket;
     private final int PORT = 8189;
-    private List<server.ClientHandler> clients;
+    private List<ClientHandler> clients;
     private AuthService authService;
 
     public Server() {
         clients = new CopyOnWriteArrayList<>();
-        authService = new server.SimpleAuthService();
+        authService = new SimpleAuthService();
 
         try {
             server = new ServerSocket(PORT);
@@ -24,7 +24,7 @@ public class Server {
             while (true) {
                 socket = server.accept();
                 System.out.println("Client connected");
-                new server.ClientHandler(this, socket);
+                new ClientHandler(this, socket);
             }
 
         } catch (IOException e) {
@@ -38,31 +38,61 @@ public class Server {
         }
     }
 
-    public void broadcastMsg(server.ClientHandler clientHandler, String msg){
+    public void broadcastMsg(ClientHandler clientHandler, String msg) {
         String message = String.format("[ %s ]: %s", clientHandler.getNickname(), msg);
-        for (server.ClientHandler c : clients) {
+        for (ClientHandler c : clients) {
             c.sendMsg(message);
         }
     }
 
-    public void broadcastPrivateMsg(server.ClientHandler clientHandler, String msg, String nickname){
-        String message = String.format("[ %s ]: %s", clientHandler.getNickname(), msg);
-        for (server.ClientHandler c : clients) {
-            if(c.getNickname().equals(nickname) || c.getNickname().equals(clientHandler.getNickname())) {
+    public void privateMsg(ClientHandler sender, String receiver, String msg) {
+        String message = String.format("[ %s ] to [ %s ]: %s", sender.getNickname(), receiver, msg);
+        for (ClientHandler c : clients) {
+            if (c.getNickname().equals(receiver)) {
                 c.sendMsg(message);
+                if (!c.equals(sender)) {
+                    sender.sendMsg(message);
+                }
+                return;
             }
         }
+        sender.sendMsg(String.format("User %s not found", receiver));
     }
 
-    void subscribe(server.ClientHandler clientHandler){
+    void subscribe(ClientHandler clientHandler) {
         clients.add(clientHandler);
+        broadcastClientList();
     }
 
-    void unsubscribe(server.ClientHandler clientHandler){
+    void unsubscribe(ClientHandler clientHandler) {
         clients.remove(clientHandler);
+        broadcastClientList();
     }
 
     public AuthService getAuthService() {
         return authService;
+    }
+
+    public boolean isLoginAuthenticated(String login) {
+        for (ClientHandler c : clients) {
+            if (c.getLogin().equals(login)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void broadcastClientList() {
+        StringBuilder sb = new StringBuilder(Command.CLIENT_LIST);
+
+        for (ClientHandler c : clients) {
+            sb.append(" ").append(c.getNickname());
+        }
+
+        String msg = sb.toString();
+
+        for (ClientHandler c : clients) {
+            c.sendMsg(msg);
+        }
     }
 }
