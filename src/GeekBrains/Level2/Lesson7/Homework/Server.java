@@ -10,12 +10,12 @@ public class Server {
     private ServerSocket server;
     private Socket socket;
     private final int PORT = 8189;
-    private List<ClientHandler> clients;
+    private List<server.ClientHandler> clients;
     private AuthService authService;
 
     public Server() {
         clients = new CopyOnWriteArrayList<>();
-        authService = new SimpleAuthService();
+        authService = new server.SimpleAuthService();
 
         try {
             server = new ServerSocket(PORT);
@@ -24,7 +24,7 @@ public class Server {
             while (true) {
                 socket = server.accept();
                 System.out.println("Client connected");
-                new ClientHandler(this, socket);
+                new server.ClientHandler(this, socket);
             }
 
         } catch (IOException e) {
@@ -38,18 +38,27 @@ public class Server {
         }
     }
 
-    public void broadcastMsg(ClientHandler clientHandler, String msg){
+    public void broadcastMsg(server.ClientHandler clientHandler, String msg){
         String message = String.format("[ %s ]: %s", clientHandler.getNickname(), msg);
-        for (ClientHandler c : clients) {
+        for (server.ClientHandler c : clients) {
             c.sendMsg(message);
         }
     }
 
-    void subscribe(ClientHandler clientHandler){
+    public void broadcastPrivateMsg(server.ClientHandler clientHandler, String msg, String nickname){
+        String message = String.format("[ %s ]: %s", clientHandler.getNickname(), msg);
+        for (server.ClientHandler c : clients) {
+            if(c.getNickname().equals(nickname) || c.getNickname().equals(clientHandler.getNickname())) {
+                c.sendMsg(message);
+            }
+        }
+    }
+
+    void subscribe(server.ClientHandler clientHandler){
         clients.add(clientHandler);
     }
 
-    void unsubscribe(ClientHandler clientHandler){
+    void unsubscribe(server.ClientHandler clientHandler){
         clients.remove(clientHandler);
     }
 
