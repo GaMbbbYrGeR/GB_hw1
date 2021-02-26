@@ -57,7 +57,13 @@ public class ClientHandler {
                             break;
                         }
 
-                        server.broadcastMsg(this, str);
+                        String[] token = str.split("\\s", 3);
+
+                        if (token[0].equals(Command.PRIVATCHAT)) {
+                            server.broadcastPrivateMsg(this, token[2], token[1]);
+                        } else {
+                            server.broadcastMsg(this, str);
+                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
