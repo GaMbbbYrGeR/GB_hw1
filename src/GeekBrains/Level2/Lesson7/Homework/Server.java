@@ -10,12 +10,12 @@ public class Server {
     private ServerSocket server;
     private Socket socket;
     private final int PORT = 8189;
-    private List<server.ClientHandler> clients;
+    private List<ClientHandler> clients;
     private AuthService authService;
 
     public Server() {
         clients = new CopyOnWriteArrayList<>();
-        authService = new server.SimpleAuthService();
+        authService = new SimpleAuthService();
 
         try {
             server = new ServerSocket(PORT);
@@ -24,7 +24,7 @@ public class Server {
             while (true) {
                 socket = server.accept();
                 System.out.println("Client connected");
-                new server.ClientHandler(this, socket);
+                new ClientHandler(this, socket);
             }
 
         } catch (IOException e) {
@@ -38,27 +38,27 @@ public class Server {
         }
     }
 
-    public void broadcastMsg(server.ClientHandler clientHandler, String msg){
+    public void broadcastMsg(ClientHandler clientHandler, String msg){
         String message = String.format("[ %s ]: %s", clientHandler.getNickname(), msg);
-        for (server.ClientHandler c : clients) {
+        for (ClientHandler c : clients) {
             c.sendMsg(message);
         }
     }
 
-    public void broadcastPrivateMsg(server.ClientHandler clientHandler, String msg, String nickname){
+    public void broadcastPrivateMsg(ClientHandler clientHandler, String msg, String nickname){
         String message = String.format("[ %s ]: %s", clientHandler.getNickname(), msg);
-        for (server.ClientHandler c : clients) {
+        for (ClientHandler c : clients) {
             if(c.getNickname().equals(nickname) || c.getNickname().equals(clientHandler.getNickname())) {
                 c.sendMsg(message);
             }
         }
     }
 
-    void subscribe(server.ClientHandler clientHandler){
+    void subscribe(ClientHandler clientHandler){
         clients.add(clientHandler);
     }
 
-    void unsubscribe(server.ClientHandler clientHandler){
+    void unsubscribe(ClientHandler clientHandler){
         clients.remove(clientHandler);
     }
 
