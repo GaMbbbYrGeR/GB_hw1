@@ -1,4 +1,4 @@
-package commands;
+package GeekBrains.Level2.Lesson8.Homework;
 
 public class Command {
     public static final String END = "/end";

@@ -1,5 +1,4 @@
-package client;
-
+package GeekBrains.Level2.Lesson8.Homework;
 import javafx.event.ActionEvent;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
