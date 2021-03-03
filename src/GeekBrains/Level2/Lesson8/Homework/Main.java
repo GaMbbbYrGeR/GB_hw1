@@ -1,4 +1,4 @@
-package client;
+package GeekBrains.Level2.Lesson8.Homework;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

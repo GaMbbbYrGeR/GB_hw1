@@ -1,6 +1,4 @@
-package server;
-
-import commands.Command;
+package GeekBrains.Level2.Lesson8.Homework;
 
 import java.io.IOException;
 import java.net.ServerSocket;

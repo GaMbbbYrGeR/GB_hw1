@@ -1,6 +1,5 @@
-package client;
+package GeekBrains.Level2.Lesson8.Homework;
 
-import commands.Command;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
